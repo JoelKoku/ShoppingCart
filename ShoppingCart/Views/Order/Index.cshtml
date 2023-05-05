@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model List<Order>
+@inject UserManager<IdentityUser> _userManager
+<h2>Orders</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>User Id</th>
+            <th>CreateDate</th>
+            <th>Items</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            var user = await _userManager.FindByIdAsync(order.UserId);
+            <tr>
+                <td>@order.Id</td>
+                <td>@user.UserName</td>
+                <td>@order.CreateDate.ToShortDateString()</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Unit Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in order.OrderDetail)
+                            {
+                                <tr>
+                                    <td>@item.Book.BookName</td>
+                                    <td>@item.Book.Price.ToString()</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.UnitPrice.ToString("C")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
